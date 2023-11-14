@@ -8,6 +8,10 @@
     <h1>Welcome to My Video App</h1>
     <p>This app allows you to view and manage videos captured by your Raspberry Pi.</p>
 
+    {% for message in get_flashed_messages() %}
+        <div style="color: red;">{{ message }}</div>
+    {% endfor %}
+
     <form action="/login" method="post">
         <input type="text" name="username" placeholder="Username" required>
         <input type="password" name="password" placeholder="Password" required>
@@ -15,3 +19,4 @@
     </form>
 </body>
 </html>
+
