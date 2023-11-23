@@ -46,3 +46,10 @@ if __name__ == '__main__':
     finally:
         if conn:
             conn.close()
+
+
+try:
+    conn = sqlite3.connect(db_file)
+    print(f"Connected to the database at: {db_file}")
+except Error as e:
+    print(e)

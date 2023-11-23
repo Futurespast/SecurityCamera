@@ -1,22 +1,133 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Welcome to My Video App</title>
-    <!-- Add any CSS or JS links here -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+            width: 100%;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        li {
+            display: inline-block;
+        }
+
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 10px;
+            text-decoration: none;
+        }
+
+        li a:hover {
+            background-color: #111;
+        }
+
+        .navbar-logo {
+            padding: 0;
+            width: 60%;
+            overflow: auto;
+        }
+
+        .navbar-logo img {
+            max-height: 60px;
+            width: 50px;
+            width: 10%
+        }
+
+        .content {
+            padding: 60px 10px 10px; /* Adjusted padding */
+            text-align: center;
+            flex: 1;
+        }
+
+        section {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        section h1 {
+            margin-bottom: 10px;
+        }
+
+        section p {
+            font-size: 16px;
+        }
+
+        .flash-message {
+            color: red;
+        }
+
+        footer {
+            text-align: center;
+            padding-top: 10px;
+            background-color: gray;
+            color: white;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+        }
+
+        .watch-videos-btn {
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to My Video App</h1>
-    <p>This app allows you to view and manage videos captured by your Raspberry Pi.</p>
+    <ul>
+        <li class="navbar-logo"><img src="{{ url_for('static', filename='CamSheildPro.jpg') }}" alt="CamShieldProImage" align="left"></li>
+        <li><a href="#home">Home</a></li>
+        <li><a href="/video_list">Video List</a></li>
+        <li><a href="/register">Register</a></li>
+        <li><a href="/login">Login</a></li>
+    </ul>
 
-    {% for message in get_flashed_messages() %}
-        <div style="color: red;">{{ message }}</div>
-    {% endfor %}
+    <div class="content">
+        <section>
+            <h1>Welcome to CamShield Pro</h1>
+            <p>This security app, powered by a Raspberry Pi, is designed to enhance your safety. Equipped with sensors that detect movement and capture faces, it provides a comprehensive solution for monitoring your surroundings. Users can easily view videos, identify unknown faces, and ensure the security of their premises.</p>
 
-    <form action="/login" method="post">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <button type="submit">Login</button>
-    </form>
+            {% for message in get_flashed_messages() %}
+                <div class="flash-message">{{ message }}</div>
+            {% endfor %}
+        </section>
+
+        <a class="watch-videos-btn" href="/register">Watch Videos</a>
+
+
+    </div>
+
+    <footer>
+        <p>Author: Hege Refsnes</p>
+        <p><a href="mailto:hege@example.com">hege@example.com</a></p>
+    </footer>
 </body>
 </html>
-
