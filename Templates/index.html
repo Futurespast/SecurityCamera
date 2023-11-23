@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+            width: 100%;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        li {
+            display: inline-block;
+        }
+
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 10px;
+            text-decoration: none;
+        }
+
+        li a:hover {
+            background-color: #111;
+        }
+
+        .navbar-logo {
+            padding: 0;
+            width: 60%;
+            overflow: auto;
+        }
+
+        .navbar-logo img {
+            max-height: 60px;
+            width: 50px;
+            width: 10%
+        }
+
+        .content {
+            padding: 60px 10px 10px; /* Adjusted padding */
+            text-align: center;
+            flex: 1;
+        }
+
+        section {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        section h1 {
+            margin-bottom: 10px;
+        }
+
+        section p {
+            font-size: 16px;
+        }
+
+        .flash-message {
+            color: red;
+        }
+
+        footer {
+            text-align: center;
+            padding-top: 10px;
+            background-color: gray;
+            color: white;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+        }
+
+        .watch-videos-btn {
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+         section img {
+            max-width: 100%;
+            height: auto;
+            max-height: 500px; /* Set the maximum height as per your requirement */
+            margin-right: 20px; /* Add margin to separate image from text */
+        }
+    </style>
+</head>
+<body>
+    <ul>
+        <li class="navbar-logo"><img src="{{ url_for('static', filename='CamSheildPro.jpg') }}" alt="CamShieldProImage" align="left"></li>
+        <li><a href="/">Home</a></li>
+        <li><a href="/video_list">Video List</a></li>
+        <li><a href="/register">Register</a></li>
+        <li><a href="/login">Login</a></li>
+    </ul>
+
+    <div class="content">
+        <section>
+            <h1>Welcome to CamShield Pro</h1>
+            <img src="{{ url_for('static', filename='SecuriyCamera.jpg') }}" alt="rasberpi" align="left" ></li>
+            <p>This security app, powered by a Raspberry Pi, is designed to enhance your safety. Equipped with sensors that detect movement and capture faces, it provides a comprehensive solution for monitoring your surroundings. Users can easily view videos, identify unknown faces, and ensure the security of their premises.</p>
+
+            {% for message in get_flashed_messages() %}
+                <div class="flash-message">{{ message }}</div>
+            {% endfor %}
+        </section>
+
+        <a class="watch-videos-btn" href="/register">Watch Videos</a>
+
+
+    </div>
+
+    <footer>
+        <p>This project was created by Abdur Siddiqui, Sam Prasad, Michel Vacca </p>
+
+    </footer>
+</body>
+</html>
