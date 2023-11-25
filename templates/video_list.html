@@ -99,10 +99,30 @@
             border-radius: 5px;
             text-decoration: none;
         }
+
+        .video-container {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .video-title {
+            margin: 0;
+            padding: 0;
+            font-size: 18px;
+        }
+
+        video {
+            width: 100%;  /* Adjust as needed */
+            height: auto;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
     <ul>
+        <!-- Navbar -->
         <li class="navbar-logo"><img src="{{ url_for('static', filename='CamSheildPro.jpg') }}" alt="CamShieldProImage" align="left"></li>
         <li><a href="/">Home</a></li>
         <li><a href="/video_list">Video List</a></li>
@@ -111,22 +131,34 @@
     </ul>
 
     <div class="content">
+        <!-- Video List Section -->
         <section>
-            <h1>Video List </h1>
+            <h1>Video List</h1>
             <p>Here is a list of Security cam footage of all the times the sensor picked up movement.</p>
 
+            <!-- Flash Messages -->
             {% for message in get_flashed_messages() %}
                 <div class="flash-message">{{ message }}</div>
             {% endfor %}
+
+            <!-- Iterate over videos and display each one with a player -->
+            {% for video in videos %}
+                <div class="video-container">
+                    <h2 class="video-title">ID: {{ video._id }}</h2> <!-- Video ID -->
+                    <video width="320" height="240" controls>
+                        <source src="{{ url_for('stream_video', video_id=video._id) }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            {% else %}
+                <p>No videos found.</p> <!-- Displayed if there are no videos -->
+            {% endfor %}
         </section>
-
-
     </div>
 
-     <footer>
-        <p>This project was created by Abdur Siddiqui, Sam Prasad, Michel Vacca </p>
-
+    <!-- Footer -->
+    <footer>
+        <p>This project was created by Abdur Siddiqui, Sam Prasad, Michel Vacca</p>
     </footer>
 </body>
 </html>
-
