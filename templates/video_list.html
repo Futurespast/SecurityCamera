@@ -1,57 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Security Camera App</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+
+        .navbar {
+            margin-bottom: 0;
+            border-radius: 0;
         }
 
-        ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #333;
-            width: 100%;
+
+        footer {
+            background-color: #f2f2f2;
+            padding: 25px;
             text-align: center;
-            position: fixed;
-            top: 0;
-            z-index: 1000;
         }
 
-        li {
-            display: inline-block;
-        }
-
-        li a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 10px;
-            text-decoration: none;
-        }
-
-        li a:hover {
-            background-color: #111;
-        }
-
-        .navbar-logo {
-            padding: 0;
-            width: 60%;
-            overflow: auto;
-        }
-
-        .navbar-logo img {
-            max-height: 60px;
-            width: 50px;
-            width: 10%
+        .flash-message {
+            color: red;
         }
 
         .content {
@@ -60,32 +31,11 @@
             flex: 1;
         }
 
-        section {
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: left;
-        }
 
-        section h1 {
-            margin-bottom: 10px;
-        }
-
-        section p {
-            font-size: 16px;
-        }
-
-        .flash-message {
-            color: red;
-        }
-
-        footer {
-            text-align: center;
-            padding-top: 10px;
-            background-color: gray;
-            color: white;
-            width: 100%;
-            position: fixed;
-            bottom: 0;
+        @media (max-width: 600px) {
+            .carousel-caption {
+                display: none;
+            }
         }
 
         .watch-videos-btn {
@@ -114,21 +64,43 @@
         }
 
         video {
-            width: 100%;  /* Adjust as needed */
+            width: 100%; /* Adjust as needed */
             height: auto;
             border-radius: 4px;
+        }
+        section {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: left;
         }
     </style>
 </head>
 <body>
-    <ul>
-        <!-- Navbar -->
-        <li class="navbar-logo"><img src="{{ url_for('static', filename='CamSheildPro.jpg') }}" alt="CamShieldProImage" align="left"></li>
-        <li><a href="/">Home</a></li>
-        <li><a href="/video_list">Video List</a></li>
-        <li><a href="/register">Register</a></li>
-        <li><a href="/login">Login</a></li>
-    </ul>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li><</li>
+                    <li class="active"><a href="/">Home</a></li>
+                    <li><a href="/video_list">Video List</a></li>
+                    <li><a href="/register">Register</a></li>
+                    <li><a href="/login">Login</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+
+
 
     <div class="content">
         <!-- Video List Section -->
@@ -138,27 +110,30 @@
 
             <!-- Flash Messages -->
             {% for message in get_flashed_messages() %}
-                <div class="flash-message">{{ message }}</div>
+            <div class="flash-message">{{ message }}</div>
             {% endfor %}
 
             <!-- Iterate over videos and display each one with a player -->
             {% for video in videos %}
-                <div class="video-container">
-                    <h2 class="video-title">ID: {{ video._id }}</h2> <!-- Video ID -->
-                    <video width="320" height="240" controls>
-                        <source src="{{ url_for('stream_video', video_id=video._id) }}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
+            <div class="video-container">
+                <h2 class="video-title">ID: {{ video._id }}</h2> <!-- Video ID -->
+                <video width="320" height="240" controls>
+                    <source src="{{ url_for('stream_video', video_id=video._id) }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
             {% else %}
-                <p>No videos found.</p> <!-- Displayed if there are no videos -->
+            <p>No videos found.</p> <!-- Displayed if there are no videos -->
             {% endfor %}
         </section>
     </div>
 
-    <!-- Footer -->
+
     <footer>
-        <p>This project was created by Abdur Siddiqui, Sam Prasad, Michel Vacca</p>
+        <p>This project was created by Abdur Siddiqui, Sam Prasad, Michel Vacca </p>
+
     </footer>
+ 
+
 </body>
 </html>

@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -13,95 +16,36 @@
             min-height: 100vh;
         }
 
-        ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #333;
-            width: 100%;
+        .navbar {
+            margin-bottom: 0;
+            border-radius: 0;
+        }
+
+        footer {
+            background-color: #f2f2f2;
+            padding: 25px;
             text-align: center;
             position: fixed;
-            top: 0;
-            z-index: 1000;
+            bottom: 0;
+            width: 100%;
         }
 
-        li {
-            display: inline-block;
-        }
-
-        li a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 10px;
-            text-decoration: none;
-        }
-
-        li a:hover {
-            background-color: #111;
-        }
-
-        .navbar-logo {
-            padding: 0;
-            width: 60%;
-            overflow: auto;
-        }
-
-        .navbar-logo img {
-            max-height: 60px;
-            width: 50px;
-            width: 10%;
-        }
-
-        .content {
-            padding: 60px 10px 10px; /* Adjusted padding */
+        .container {
+            padding: 60px 10px 10px;
             text-align: center;
             flex: 1;
         }
 
-        section {
-            max-width: 600px;
+        form {
+            max-width: 400px;
             margin: 0 auto;
-            text-align: left;
         }
 
-        section h1 {
-            margin-bottom: 10px;
+        form h1 {
+            margin-bottom: 20px;
         }
 
-        section p {
-            font-size: 16px;
-        }
-
-        .flash-message {
-            color: red;
-        }
-
-        footer {
-            text-align: center;
-            padding-top: 10px;
-            background-color: gray;
-            color: white;
-            width: 100%;
-            position: fixed;
-            bottom: 0;
-        }
-
-        .watch-videos-btn {
-            margin-top: 20px;
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-        }
-
-        /* Full-width input fields */
-        input[type=text], input[type=password] {
+        input {
             width: 100%;
             padding: 15px;
             margin: 5px 0 22px 0;
@@ -110,7 +54,7 @@
             background: #f1f1f1;
         }
 
-        input[type=text]:focus, input[type=password]:focus {
+        input:focus {
             background-color: #ddd;
             outline: none;
         }
@@ -120,9 +64,8 @@
             margin-bottom: 25px;
         }
 
-        /* Set a style for all buttons */
         button {
-            background-color:#40E0D0;
+            background-color: black;
             color: white;
             padding: 14px 20px;
             margin: 8px 0;
@@ -133,63 +76,60 @@
         }
 
         button:hover {
-            opacity:1;
+            opacity: 1;
         }
 
-        /* Extra styles for the cancel button */
-        .cancelbtn {
-            padding: 14px 20px;
-            background-color: #f44336;
-        }
-
-        /* Float cancel and signup buttons and add an equal width */
-        .cancelbtn, .signupbtn {
-            float: left;
-            width: 50%;
-        }
-
-        /* Add padding to container elements */
-        .container {
-            padding: 16px;
-        }
-
-        /* Clear floats */
         .clearfix::after {
             content: "";
             clear: both;
             display: table;
         }
 
-        /* Change styles for cancel button and signup button on extra small screens */
         @media screen and (max-width: 300px) {
-            .cancelbtn, .signupbtn {
+            button {
                 width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <ul>
-        <li class="navbar-logo"><img src="{{ url_for('static', filename='CamSheildPro.jpg') }}" alt="CamShieldProImage" align="left"></li>
-        <li><a href="/">Home</a></li>
-        <li><a href="/video_list">Video List</a></li>
-        <li><a href="/register">Register</a></li>
-        <li><a href="#login">Login</a></li>
-    </ul>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li><</li>
+                    <li class="active"><a href="/">Home</a></li>
+                    <li><a href="/video_list">Video List</a></li>
+                    <li><a href="/register">Register</a></li>
+                    <li><a href="/login">Login</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-    <div class="content">
-        <form action="/login" method="post" class="container">
-            <h1>Log in </h1>
+    <div class="container">
+        <form action="/register" method="post">
+            <h1>Sign In</h1>
             <hr>
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Login</button>
+            <input type="text" placeholder="Enter Username" name="username" required>
+            <input type="password" placeholder="Enter Password" name="psw" required>
+                <button type="submit">Sign In </button>
+
         </form>
     </div>
 
-     <footer>
-        <p>This project was created by Abdur Siddiqui, Sam Prasad, Michel Vacca </p>
-
+    <footer>
+        <p>This project was created by Abdur Siddiqui, Sam Prasad, Michel Vacca</p>
     </footer>
 </body>
 </html>
