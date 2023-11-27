@@ -5,20 +5,15 @@ from bson import ObjectId
 from gridfs import GridFS, NoFile
 from mongo_connection import get_database, get_gridfs
 from pymongo import MongoClient
-from flask_cors import CORS
-
-
-
 
 
 
 app = Flask(__name__)
-CORS(app)
 app.secret_key = 'secretkey!'
 
 def get_database():
     client = MongoClient("mongodb+srv://Mvacc:pwd@iotproject.lkfss1w.mongodb.net/?retryWrites=true&w=majority")
-    db = client.your_database_name  # Replace with your actual database name
+    db = client.your_database_name
     return db
 
 # Initialize GridFS
@@ -29,40 +24,50 @@ fs = GridFS(db)
 def index():
     return render_template('index.html')
 
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['psw'].encode('utf-8')
         hashed = bcrypt.hashpw(password, bcrypt.gensalt())
-        
+
         conn = sqlite3.connect("securityDatabase.db")
         cursor = conn.cursor()
         cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, hashed))
         conn.commit()
         conn.close()
-        
+
+        print(f"User registered: {username}")  # Debugging statement
         return redirect(url_for('login'))
     return render_template('register.html')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password'].encode('utf-8')
-        
+
         conn = sqlite3.connect("securityDatabase.db")
         cursor = conn.cursor()
         cursor.execute("SELECT password FROM users WHERE username=?", (username,))
         user = cursor.fetchone()
         conn.close()
-        
-        if user and bcrypt.checkpw(password, user[0]):
-            session['username'] = username
-            return redirect(url_for('video_list'))
+
+        if user:
+            if bcrypt.checkpw(password, user[0]):
+                session['username'] = username
+                print(f"Login successful for user: {username}")  # Debugging statement
+                return redirect(url_for('video_list'))
+            else:
+                print(f"Password mismatch for user: {username}")  # Debugging statement
+                return "Login Failed - Password Mismatch"
         else:
-            return "Login Failed"
+            print(f"No user found for username: {username}")  # Debugging statement
+            return "Login Failed - User Not Found"
     return render_template('login.html')
+
 
 @app.route('/video_list')
 def video_list():
