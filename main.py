@@ -17,7 +17,6 @@ def get_database():
     db = client.your_database_name
     return db
 
-# Initialize GridFS
 db = get_database()
 fs = GridFS(db)
 
@@ -69,24 +68,22 @@ def login():
             return "Login Failed - User Not Found"
     return render_template('login.html')
 
+# Link to open the plotting page for all the videos
 @app.route('/video_counts_chart')
 def video_counts_chart():
     if 'username' not in session:
         return redirect(url_for('login'))
 
     try:
-        # Retrieve all videos from GridFS
         videos = list(db.fs.files.find({}))
 
-        # Extract dates and count the number of videos for each date
-        dates = [video['uploadDate'].date() for video in videos]  # Directly getting the date part
+        dates = [video['uploadDate'].date() for video in videos]
         date_counts = Counter(dates)
 
-        # Sort dates and prepare data for the chart
         sorted_dates = sorted(date_counts)
         counts = [date_counts[date] for date in sorted_dates]
 
-        # Convert dates to string for JavaScript
+        # X axis labels for the date the video(s) were recorded on
         labels = [date.strftime("%Y-%m-%d") for date in sorted_dates]
 
         return render_template('plot_template.html', labels=labels, data=counts)
@@ -95,7 +92,7 @@ def video_counts_chart():
         return redirect(url_for('index'))
 
 
-
+# Our function to display all the videos on the website
 @app.route('/video_list', methods=['GET'])
 def video_list():
     if 'username' not in session:
@@ -118,6 +115,7 @@ def video_list():
     ]
     return render_template('video_list.html', video_data=video_data)
 
+# Testing Route for Videos | Not to be presented in final project
 @app.route('/stream_video/<video_id>')
 def stream_video(video_id):
     try:
@@ -136,6 +134,7 @@ from flask import after_this_request
 def download_video(video_id):
     output_path = 'temp_video.mp4'
     try:
+        # Call my function in retrieve.py to download the video
         if retrieve_video_from_gridfs(ObjectId(video_id), output_path):
             @after_this_request
             def remove_file(response):
@@ -167,5 +166,6 @@ def logout():
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    app.run(debug=True, threaded=True)
+    # app.run(debug=True, threaded=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
 
