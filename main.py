@@ -1,12 +1,13 @@
-import bcrypt
-from flask import Flask, render_template, redirect, url_for, request, session, Response
+import os
 import sqlite3
+from datetime import datetime
+import bcrypt
 from bson import ObjectId
+from flask import Flask, render_template, redirect, url_for, request, session, Response, flash
 from gridfs import GridFS, NoFile
-from mongo_connection import get_database, get_gridfs
 from pymongo import MongoClient
-
-
+from retrieve import retrieve_video_from_gridfs
+from collections import Counter
 
 app = Flask(__name__)
 app.secret_key = 'secretkey!'
@@ -38,7 +39,7 @@ def register():
         conn.commit()
         conn.close()
 
-        print(f"User registered: {username}")  # Debugging statement
+        print(f"User registered: {username}")
         return redirect(url_for('login'))
     return render_template('register.html')
 
@@ -58,41 +59,97 @@ def login():
         if user:
             if bcrypt.checkpw(password, user[0]):
                 session['username'] = username
-                print(f"Login successful for user: {username}")  # Debugging statement
+                print(f"Login successful for user: {username}")
                 return redirect(url_for('video_list'))
             else:
-                print(f"Password mismatch for user: {username}")  # Debugging statement
+                print(f"Password mismatch for user: {username}")
                 return "Login Failed - Password Mismatch"
         else:
-            print(f"No user found for username: {username}")  # Debugging statement
+            print(f"No user found for username: {username}")
             return "Login Failed - User Not Found"
     return render_template('login.html')
 
-
-@app.route('/video_list')
-def video_list():
-    if 'username' in session:
-        videos = db.fs.files.find()
-        return render_template('video_list.html', videos=videos)
-    else:
+@app.route('/video_counts_chart')
+def video_counts_chart():
+    if 'username' not in session:
         return redirect(url_for('login'))
+
+    try:
+        # Retrieve all videos from GridFS
+        videos = list(db.fs.files.find({}))
+
+        # Extract dates and count the number of videos for each date
+        dates = [video['uploadDate'].date() for video in videos]  # Directly getting the date part
+        date_counts = Counter(dates)
+
+        # Sort dates and prepare data for the chart
+        sorted_dates = sorted(date_counts)
+        counts = [date_counts[date] for date in sorted_dates]
+
+        # Convert dates to string for JavaScript
+        labels = [date.strftime("%Y-%m-%d") for date in sorted_dates]
+
+        return render_template('plot_template.html', labels=labels, data=counts)
+    except Exception as e:
+        flash(str(e))
+        return redirect(url_for('index'))
+
+
+
+@app.route('/video_list', methods=['GET'])
+def video_list():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    selected_date = request.args.get('date')
+    videos = db.fs.files.find()
+
+    if selected_date:
+        selected_date_obj = datetime.strptime(selected_date, '%Y-%m-%d')
+        videos = filter(lambda v: datetime.strptime(v['metadata']['start_time'], '%d-%m-%Y-%H-%M-%S').date() == selected_date_obj.date(), videos)
+
+    video_data = [
+        {
+            'video_id': str(video['_id']),
+            'filename': video['filename'],
+            'date': video['metadata'].get('start_time')
+        }
+        for video in videos
+    ]
+    return render_template('video_list.html', video_data=video_data)
 
 @app.route('/stream_video/<video_id>')
 def stream_video(video_id):
     try:
-        # Attempt to get the video file by its ID
         video = fs.get(ObjectId(video_id))
-
-        # Define a generator function that streams the video in chunks
         def generate():
             for chunk in video:
                 yield chunk
 
-        # Return a streaming response with the appropriate MIME type
         return Response(generate(), mimetype='video/mp4')
     except NoFile:
-        # If the video file doesn't exist or can't be opened, return a 404 error
         return "Video not found", 404
+
+from flask import after_this_request
+
+@app.route('/download_video/<video_id>')
+def download_video(video_id):
+    output_path = 'temp_video.mp4'
+    try:
+        if retrieve_video_from_gridfs(ObjectId(video_id), output_path):
+            @after_this_request
+            def remove_file(response):
+                try:
+                    os.remove(output_path)
+                except Exception as error:
+                    app.logger.error("Error removing or closing downloaded file handle", error)
+                return response
+            return send_file(output_path, as_attachment=True)
+        else:
+            return "Failed to retrieve the video.", 404
+    except Exception as e:
+        app.logger.error(f"Unexpected error: {e}")
+        return "An error occurred", 500
 
 
 from flask import send_file

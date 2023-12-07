@@ -19,8 +19,8 @@ def retrieve_video_from_gridfs(file_id, output_path):
         return False
 
 # Replace 'file_id_here' with your actual file ID and specify the output path
-video_id = ObjectId('65602ee0abcf16eff45f402f') # Replace with the actual GridFS file ID
-output_path = '/home/mvacc/Documents/VideosForIOT/my_videofileTest3.mp4'  # Replace with your desired path
+video_id = ObjectId('65715b564850ddae77e66c19') # Replace with the actual GridFS file ID
+output_path = 'output.mp4' # Replace with the desired output path
 
 if retrieve_video_from_gridfs(video_id, output_path):
     print("Video retrieved and saved to:", output_path)

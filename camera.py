@@ -28,6 +28,7 @@ SECONDS_TO_RECORD_AFTER_DETECTION = 5
 frameSize = (int(cap.get(3)), int(cap.get(4)))
 fourcc = cv2.VideoWriter_fourcc(*"mp4v")
 
+video_save_directory = "C:/Users/Mvacc/OneDrive/Documents/Semester 7/IOT 2/SecurityCamera2/static/video"
 def store_video_in_gridfs(file_path, metadata):
     with open(file_path, 'rb') as f:
         contents = f.read()
@@ -53,7 +54,8 @@ while True:
             detection = True
             current_time = datetime.datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
             video_filename = f"{current_time}.mp4"
-            out = cv2.VideoWriter(video_filename, fourcc, 15, frameSize)
+            video_filename2 = video_save_directory + f"{current_time}.mp4"  # File will be saved in specified directory
+            out = cv2.VideoWriter(video_filename2, fourcc, 15, frameSize)
             print("Started Recording!")
             start_time = datetime.datetime.now()
 

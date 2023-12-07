@@ -93,41 +93,39 @@
                     <li><a href="/video_list">Video List</a></li>
                     <li><a href="/register">Register</a></li>
                     <li><a href="/login">Login</a></li>
+                    <li><a href="/video_counts_chart">Video Counts Chart</a></li>
                 </ul>
 
             </div>
         </div>
     </nav>
 
-
-
-
     <div class="content">
+        <!-- Add this form inside your video_list.html where it's appropriate -->
+    <form action="{{ url_for('video_list') }}" method="get">
+        <label for="date-picker">Choose a date:</label>
+        <input type="date" id="date-picker" name="date" required>
+        <button type="submit">Show Videos</button>
+    </form>
+
         <!-- Video List Section -->
-        <section>
-            <h1>Video List</h1>
-            <p>Here is a list of Security cam footage of all the times the sensor picked up movement.</p>
-
-            <!-- Flash Messages -->
-            {% for message in get_flashed_messages() %}
-            <div class="flash-message">{{ message }}</div>
-            {% endfor %}
-
-            <!-- Iterate over videos and display each one with a player -->
-            {% for video in videos %}
-            <div class="video-container">
-                <h2 class="video-title">ID: {{ video._id }}</h2> <!-- Video ID -->
-                <video width="320" height="240" controls>
-                    <source src="{{ url_for('stream_video', video_id=video._id) }}" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
+    <section>
+        <h1>Video List</h1>
+        <p>Here is a list of Security cam footage of all the times the sensor picked up movement.</p>
+        <ul>
+            {% for video in video_data %}
+                <li>
+                    <a href="{{ url_for('download_video', video_id=video['video_id']) }}">
+                        {{ video['filename'] }}
+                    </a>
+                    - Recorded on: {{ video['date'] }}
+                </li>
             {% else %}
-            <p>No videos found.</p> <!-- Displayed if there are no videos -->
+                <p>No videos found.</p>
             {% endfor %}
-        </section>
+        </ul>
+    </section>
     </div>
-
 
     <footer>
         <p>This project was created by Abdur Siddiqui, Sam Prasad, Michel Vacca </p>
