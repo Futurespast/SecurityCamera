@@ -1,12 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- ... existing head elements ... -->
+    <title>Video Counts Chart</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .centered-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+    .video-chart-container {
+        text-align: center;
+        width: 1000px;
+        height: 750px;
+    }
+</style>
+
 </head>
 <body>
-    <!-- ... existing body elements ... -->
-    <canvas id="videoChart" width="400" height="200"></canvas>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li><</li>
+                    <li class="active"><a href="/">Home</a></li>
+                    <li><a href="/video_list">Video List</a></li>
+                    <li><a href="/register">Register</a></li>
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/video_counts_chart">Video Counts Chart</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+    <br>
+    <br>
+    <br>
+    <div class="centered-container">
+    <div class="video-chart-container">
+    <canvas id="videoChart" width="100" height="50"></canvas>
 
     <script>
         var ctx = document.getElementById('videoChart').getContext('2d');
@@ -31,5 +78,7 @@
             }
         });
     </script>
+    </div>
+    </div>
 </body>
 </html>
